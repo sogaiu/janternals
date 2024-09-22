@@ -490,7 +490,7 @@ For the reverse direction of "wrapping", the appropriate callables exist in Jane
 * `janet_nanbox_from_cpointer`
 * `janet_wrap_string`
 
-See `janet.h` for more details :)
+See `janet.h` for more details.
 
 ---
 
