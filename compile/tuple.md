@@ -2,6 +2,7 @@
 marp: true
 theme: default
 class: invert
+paginate: true
 ---
 
 # Compiling `(print "smile!")` to Bytecode
