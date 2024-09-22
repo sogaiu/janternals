@@ -62,7 +62,9 @@ JANET_CORE_FN(cfun_compile,
     // ...
 ```
 
-Among other things, `cfun_compile` calls `janet_compile_lint`, passing the janet tuple `(print "smile!")` via the parameter `source`.
+Among other things, `cfun_compile` calls `janet_compile_lint`, passing the janet tuple `(print "smile!")` [1] via the parameter `source`.
+
+[1] In this material, the phrase "janet _" (e.g. "janet tuple") will be used though strictly speaking it would be more accurate to say "a _ wrapped as a janet value".
 
 ---
 
