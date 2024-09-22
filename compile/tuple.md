@@ -430,9 +430,11 @@ One can determine the type of a `Janet` value via `janet_type`:
         : JANET_NUMBER)
 ```
 
+A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, `x` is treated as a `JANET_NUMBER`.
+
 ---
 
-All of the janet "types" are:
+The different possibilities for `JanetType` are:
 
 ```c
 /* Basic types for all Janet Values */
@@ -458,7 +460,7 @@ typedef enum JanetType {
 
 ---
 
-As an example, to "get at" a janet number, one can use the `janet_unwrap_number` macro:
+As an example, to "get at" a janet number for a `Janet` value `x`, one can use the `janet_unwrap_number` macro:
 
 ```c
 #define janet_unwrap_number(x) ((x).number)
@@ -467,7 +469,7 @@ As an example, to "get at" a janet number, one can use the `janet_unwrap_number`
 ---
 
 
-To "get at" a janet string, one can use the `janet_unwrap_string` macro:
+Similarly, to "get at" a janet string for a `Janet` value `x`, one can use the `janet_unwrap_string` macro:
 
 ```c
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
@@ -482,9 +484,13 @@ void *janet_nanbox_to_pointer(Janet x) {
 }
 ```
 
+Here, the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` field is returned.
+
 ---
 
-For the reverse direction of "wrapping", the appropriate callables exist in Janet's API.  For example:
+As might be expected, for the reverse direction of "wrapping", the appropriate callables exist in Janet's API.
+
+For example:
 
 * `janet_nanbox_wrap_c`
 * `janet_nanbox_from_cpointer`
