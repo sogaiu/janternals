@@ -146,7 +146,7 @@ Each `janetc_value` call is passed a `vals[i]` -- just the janet value `"smile!"
 
 ---
 
-The `janetc_value` call in `janetc_toslots` leads to a call to `janetc_cslot` (because `vals[i]` is the janet value `"smile!"`):
+The `janetc_value` call in `janetc_toslots` leads to a call to `janetc_cslot` (because `vals[i]` is the janet string value `"smile!"`):
 
 ```c
 /* Compile a single value */
