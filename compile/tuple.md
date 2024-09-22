@@ -493,3 +493,23 @@ For the reverse direction of "wrapping", the appropriate callables exist in Jane
 
 See `janet.h` for more details :)
 
+---
+
+## Additional Topics
+
+---
+
+Did not cover:
+
+* JanetCompileRest
+* JanetCompiler
+* JanetFopts
+* janetc_freeslot
+* JanetFuncDef
+* JanetRegisterTemp
+* janetc_regalloc_temp
+* janetc_const
+* janet_v_count
+* janet_v_push
+* janet_malloc
+* JanetScope
