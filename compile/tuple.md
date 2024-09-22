@@ -293,7 +293,7 @@ static void janetc_movenear(JanetCompiler *c,
 }
 ```
 
-Thus `janetc_loadconst` will be called with our janet value `"smile!"`  (obtained via the `constant` field of our slot `src`).
+Therefore, `janetc_loadconst` will be called with our janet value `"smile!"`  (obtained via the `constant` field of our slot `src`).
 
 ---
 
@@ -341,7 +341,7 @@ void janetc_emit(JanetCompiler *c, uint32_t instr) {
 
 ---
 
-Returning from out detour (remember?), all the way back to `janetc_emit_s`, after the call to `janetc_regfar`, `janetc_emit` is called:
+Returning from out detour (remember?), all the way back to `janetc_emit_s`, after the call to `janetc_regfar`, `janetc_emit` is called again:
 
 ```c
 int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
@@ -351,8 +351,6 @@ int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
     ///////////    //
     // ...
 ```
-
-Deja vu?
 
 ...and that my liege, is how we know the world to be banana-shaped.
 
