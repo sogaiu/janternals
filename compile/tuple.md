@@ -228,7 +228,6 @@ int32_t janetc_pushslots(JanetCompiler *c, JanetSlot *slots) {
         } else if (i + 1 == count) {
             janetc_emit_s(c, JOP_PUSH, slots[i], 0);
             /////////////    ////////  ////////
-            i++;
         // ...
 }
 ```
