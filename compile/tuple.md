@@ -388,3 +388,108 @@ JanetFuncDef *janetc_pop_funcdef(JanetCompiler *c) {
 ```
 
 ---
+
+## Unfinished Business: janet tuple, janet string, etc.
+
+---
+
+A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.  In the author's primary environment, this is defined in `janet.h` as:
+
+```c
+/* Recursive type (Janet) */
+#ifdef JANET_NANBOX_64
+typedef union Janet Janet;
+union Janet {
+    uint64_t u64;
+    int64_t i64;
+    double number;
+    void *pointer;
+};
+```
+
+A `Janet` is a union that is capable of representing each of the janet values (e.g. string, array, table, etc.) and locally it is 8 bytes (or 64 bits) [1].
+
+[1] Numbers are stored directly (`u64`, `i64`, and `number` fields), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` field) is stored.
+
+---
+
+The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits:
+
+```c
+#define JANET_NANBOX_TAGBITS     0xFFFF800000000000llu
+#define JANET_NANBOX_PAYLOADBITS 0x00007FFFFFFFFFFFllu
+```
+
+---
+
+One can determine the type of a `Janet` value via `janet_type`:
+
+```c
+#define janet_type(x) \
+    (isnan((x).number) \
+        ? (JanetType) (((x).u64 >> 47) & 0xF) \
+        : JANET_NUMBER)
+```
+
+---
+
+All of the janet "types" are:
+
+```c
+/* Basic types for all Janet Values */
+typedef enum JanetType {
+    JANET_NUMBER,
+    JANET_NIL,
+    JANET_BOOLEAN,
+    JANET_FIBER,
+    JANET_STRING,
+    JANET_SYMBOL,
+    JANET_KEYWORD,
+    JANET_ARRAY,
+    JANET_TUPLE,
+    JANET_TABLE,
+    JANET_STRUCT,
+    JANET_BUFFER,
+    JANET_FUNCTION,
+    JANET_CFUNCTION,
+    JANET_ABSTRACT,
+    JANET_POINTER
+} JanetType;
+```
+
+---
+
+As an example, to "get at" a janet number, one can use the `janet_unwrap_number` macro:
+
+```c
+#define janet_unwrap_number(x) ((x).number)
+```
+
+---
+
+
+To "get at" a janet string, one can use the `janet_unwrap_string` macro:
+
+```c
+#define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
+```
+
+which makes use of `janet_nanbox_to_pointer`:
+
+```c
+void *janet_nanbox_to_pointer(Janet x) {
+    x.i64 &= JANET_NANBOX_PAYLOADBITS;
+    return x.pointer;
+}
+```
+
+---
+
+For the reverse direction of "wrapping", the appropriate callables exist in Janet's API.  For example:
+
+* `janet_nanbox_wrap_c`
+* `janet_nanbox_from_cpointer`
+* `janet_wrap_string`
+
+See `janet.h` for more details :)
+
