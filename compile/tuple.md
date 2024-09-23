@@ -44,8 +44,7 @@ Much will be skipped, but hope to cover many essentials...
 
 ---
 
-The Janet function `compile` is implemented in C by `cfun_compile` in
-`compile.c`:
+The Janet function `compile` is implemented in C by `cfun_compile` in `compile.c`:
 
 ```c
 /* C Function for compiling */
@@ -123,9 +122,7 @@ Subsequently, `janetc_call` is called with the return value of `janetc_toslots` 
 
 ---
 
-`janetc_toslots` returns a pointer to a succession of `JanetSlot`s by
-accumulating (via `janet_v_push`) individual `JanetSlot` values
-produced via `janetc_value`:
+`janetc_toslots` returns a pointer to a succession of `JanetSlot`s by accumulating (via `janet_v_push`) individual `JanetSlot` values produced via `janetc_value`:
 
 ```c
 /* Get a bunch of slots for function arguments */
@@ -192,13 +189,11 @@ JanetSlot janetc_cslot(Janet x) {
 }
 ```
 
-Note that the slot's `flags` field includes `JANET_SLOT_CONSTANT`, the
-`index` field is `-1`, and the `constant` field is the janet value `"smile!"`.
+Note that the slot's `flags` field includes `JANET_SLOT_CONSTANT`, the `index` field is `-1`, and the `constant` field is the janet value `"smile!"`.
 
 ---
 
-Returning to `janetc_call`, it takes the `JanetSlot*` (here named
-`slots`) produced by `janetc_toslots` and calls `janetc_pushslots`:
+Returning to `janetc_call`, it takes the `JanetSlot*` (here named `slots`) produced by `janetc_toslots` and calls `janetc_pushslots`:
 
 ```c
 /* Compile a call or tailcall instruction */
@@ -215,8 +210,7 @@ static JanetSlot janetc_call(JanetFopts opts, JanetSlot *slots, JanetSlot fun) {
 
 ---
 
-`janetc_pushslots` calls `janetc_emit_s` to emit bytecode to push
-a value referred to by `slots[i]` on the top of the stack:
+`janetc_pushslots` calls `janetc_emit_s` to emit bytecode to push a value referred to by `slots[i]` on the top of the stack:
 
 ```c
 /* Push slots loaded via janetc_toslots. Return the minimum number of slots pushed,
@@ -235,8 +229,7 @@ int32_t janetc_pushslots(JanetCompiler *c, JanetSlot *slots) {
 }
 ```
 
-Note that bytecode being generated doesn't imply it ever gets
-executed.  The bytecode might eventually be executed or it might not.
+Note that bytecode being generated doesn't imply it ever gets executed.  The bytecode might eventually be executed or it might not.
 
 ---
 
@@ -257,8 +250,7 @@ int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
 
 ---
 
-In `janetc_regfar`, since the slot (`s`) was made via `janetc_cslot`,
-`s.index` is `-1`, so the body of the `if` is skipped.  Thus, `janetc_movenear` will be called:
+In `janetc_regfar`, since the slot (`s`) was made via `janetc_cslot`, `s.index` is `-1`, so the body of the `if` is skipped.  Thus, `janetc_movenear` will be called:
 
 ```c
 /* Convert a slot to a two byte register */
@@ -326,9 +318,7 @@ static void janetc_loadconst(JanetCompiler *c, Janet k, int32_t reg) {
 
 ---
 
-`janetc_emit` takes a single bytecode instruction (`instr`) and
-using `janet_v_push`, appends it to `c->buffer` (which is where the
-`JanetCompiler` value, `c`, accumulates emitted bytecode).
+`janetc_emit` takes a single bytecode instruction (`instr`) and using `janet_v_push`, appends it to `c->buffer` (which is where the `JanetCompiler` value, `c`, accumulates emitted bytecode).
 
 ```c
 /* Emit a raw instruction with source mapping. */
@@ -360,9 +350,7 @@ int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
 
 ---
 
-As noted earlier, `janetc_pop_funcdef` is called by `janet_compile_lint` after
-it calls `janetc_value`.  `janetc_pop_funcdef` is responsible for copying
-a portion of `c->buffer `to `def->bytecode`:
+As noted earlier, `janetc_pop_funcdef` is called by `janet_compile_lint` after it calls `janetc_value`.  `janetc_pop_funcdef` is responsible for copying a portion of `c->buffer `to `def->bytecode`:
 
 ```c
 /* Compile a funcdef */
