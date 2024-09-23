@@ -233,7 +233,7 @@ Note that bytecode being generated doesn't imply it ever gets executed.  The byt
 
 ---
 
-The primary action of `janetc_emit_s` (`_s` means bytecode with one argument) is to call `janetc_emit`.  In this case, with opcode (`op`) `JOP_PUSH` and the `JanetSlot` (`s`) for our janet value `"smile!"`:
+The primary action of `janetc_emit_s` [1] is to call `janetc_emit`.  In this case, with opcode (`op`) `JOP_PUSH` and the `JanetSlot` (`s`) for our janet value `"smile!"`:
 
 ```c
 int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
@@ -247,6 +247,8 @@ int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
 ```
 
 ...but before calling `janetc_emit`, `janetc_emit_s` calls `janetc_regfar` (passing it the `JanetSlot` value (`s`) for our janet value `"smile!"`).  Time for a bit of a detour...
+
+[1] `_s` means bytecode with one argument.
 
 ---
 
