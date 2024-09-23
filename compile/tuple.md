@@ -496,7 +496,7 @@ See `janet.h` for more details.
 
 Did not cover:
 
-* JanetCompileRest
+* JanetCompileResult
 * JanetCompiler
 * JanetFopts
 * janetc_freeslot
