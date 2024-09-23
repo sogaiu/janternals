@@ -474,7 +474,7 @@ void *janet_nanbox_to_pointer(Janet x) {
 }
 ```
 
-Here, the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` field is returned.
+Here, only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` field is returned.
 
 ---
 
