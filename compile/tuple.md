@@ -256,7 +256,7 @@ static JanetSlot janetc_call(JanetFopts opts, JanetSlot *slots, JanetSlot fun) {
 
 Back at `janetc_call`, it takes `slots` (a `JanetSlot*`) from `janetc_toslots` and calls `janetc_pushslots`.
 
-Eventually, execution will continues after `janetc_pushslots` to reach `janetc_gettarget`, but this will be happening much later...
+Eventually, execution will continue after `janetc_pushslots` to reach `janetc_gettarget`, but this will be happening much later...
 
 ---
 
