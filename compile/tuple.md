@@ -542,7 +542,7 @@ typedef enum JanetType {
 } JanetType;
 ```
 
-The `JanetType` enum has 16 (`0xF` == `1111` base 2) possibile values.
+The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile values.
 
 ---
 
