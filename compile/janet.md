@@ -13,7 +13,7 @@ union Janet {
     void *pointer;
 };
 ```
-A number of the `janet*` C functions take as a parameter, a value of type `Janet`.
+A number of the `janet*` C functions take a value of type `Janet` as a parameter.
 
 In the author's primary environment, a `Janet` is a union that is 8 bytes (64 bits) in size.
 
@@ -41,7 +41,7 @@ The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while 
 
 One can determine the type of a `Janet` value via `janet_type`.
 
-A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, `x` is treated as a `JANET_NUMBER`.
+A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, the result is `JANET_NUMBER`.
 
 ---
 
@@ -75,7 +75,7 @@ The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile val
 #define janet_unwrap_number(x) ((x).number)
 ```
 
-To "get at" a janet number for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.
+To "get at" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.
 
 It accesses the `number` member of the union.
 
@@ -85,7 +85,7 @@ It accesses the `number` member of the union.
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
 ```
 
-Similarly, to "get at" a janet string for a `Janet` value `x`, one can use the `janet_unwrap_string` macro...which makes use of `janet_nanbox_to_pointer`.
+Similarly, to "get at" a `JanetString` for a `Janet` value `x`, one can use the `janet_unwrap_string` macro...which makes use of `janet_nanbox_to_pointer`.
 
 ---
 
@@ -96,7 +96,7 @@ void *janet_nanbox_to_pointer(Janet x) {
 }
 ```
 
-Only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` member is returned.
+Only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then (the modified) `x`'s `pointer` member is returned.
 
 ---
 
