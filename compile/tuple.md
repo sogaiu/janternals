@@ -5,14 +5,16 @@ class: invert
 paginate: true
 ---
 
-# Compiling `(print "smile!")` to Bytecode
+# Compiling a Tuple to Bytecode
 
 ---
 
-Starting with:
+Suppose:
 
-```janet
-(compile '(print "smile!"))
+```lisp
+(def a-tuple '(print "smile!"))
+
+(compile a-tuple)
 ```
 
 let's trace how we end up with the corresponding Janet bytecode.
