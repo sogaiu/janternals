@@ -475,120 +475,6 @@ As noted earlier, `janetc_pop_funcdef` is called by `janet_compile_lint` after i
 
 ---
 
-## Unfinished Business: janet tuple, janet string, etc.
-
----
-
-```c
-/* Recursive type (Janet) */
-#ifdef JANET_NANBOX_64
-typedef union Janet Janet;
-union Janet {
-    uint64_t u64;
-    int64_t i64;
-    double number;
-    void *pointer;
-};
-```
-A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.
-
-In the author's primary environment, a `Janet` is a union that is 8 bytes (64 bits) in size.
-
-It is capable of representing each of the janet values (e.g. string, array, table, etc.).
-
-Numbers are stored directly (`u64`, `i64`, and `number` members), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` member) is stored.
-
----
-
-```c
-#define JANET_NANBOX_TAGBITS     0xFFFF800000000000llu
-#define JANET_NANBOX_PAYLOADBITS 0x00007FFFFFFFFFFFllu
-```
-
-The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.  64 bits = 17 bits + 47 bits.
-
----
-
-```c
-#define janet_type(x) \
-    (isnan((x).number) \
-        ? (JanetType) (((x).u64 >> 47) & 0xF) \
-        : JANET_NUMBER)
-```
-
-One can determine the type of a `Janet` value via `janet_type`.
-
-A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, `x` is treated as a `JANET_NUMBER`.
-
----
-
-```c
-/* Basic types for all Janet Values */
-typedef enum JanetType {
-    JANET_NUMBER,
-    JANET_NIL,
-    JANET_BOOLEAN,
-    JANET_FIBER,
-    JANET_STRING,
-    JANET_SYMBOL,
-    JANET_KEYWORD,
-    JANET_ARRAY,
-    JANET_TUPLE,
-    JANET_TABLE,
-    JANET_STRUCT,
-    JANET_BUFFER,
-    JANET_FUNCTION,
-    JANET_CFUNCTION,
-    JANET_ABSTRACT,
-    JANET_POINTER
-} JanetType;
-```
-
-The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile values.
-
----
-
-```c
-#define janet_unwrap_number(x) ((x).number)
-```
-
-To "get at" a janet number for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.
-
-It accesses the `number` member of the union.
-
----
-
-```c
-#define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
-```
-
-Similarly, to "get at" a janet string for a `Janet` value `x`, one can use the `janet_unwrap_string` macro...which makes use of `janet_nanbox_to_pointer`.
-
----
-
-```c
-void *janet_nanbox_to_pointer(Janet x) {
-    x.i64 &= JANET_NANBOX_PAYLOADBITS;
-    return x.pointer;
-}
-```
-
-only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` member is returned.
-
----
-
-As might be expected, for the reverse direction of "wrapping", the appropriate callables exist in Janet's API.
-
-For example:
-
-* `janet_nanbox_wrap_c`
-* `janet_nanbox_from_cpointer`
-* `janet_wrap_string`
-
-See `janet.h` for more details.
-
----
-
 ## Additional Topics
 
 ---
@@ -596,6 +482,7 @@ See `janet.h` for more details.
 Did not cover:
 
 ```
+* Janet
 * JanetCompileResult
 * JanetCompiler
 * JanetFopts
