@@ -231,7 +231,7 @@ JanetSlot janetc_cslot(Janet x) {
 
 `janetc_cslot` produces a `JanetSlot` for a constant value.
 
-Note that the slot's `flags` field includes `JANET_SLOT_CONSTANT`, the `index` field is `-1`, and the `constant` field is the janet value `"smile!"`.
+Note that the slot's `flags` member includes `JANET_SLOT_CONSTANT`, the `index` member is `-1`, and the `constant` member is the janet value `"smile!"`.
 
 ---
 
@@ -332,7 +332,7 @@ static void janetc_movenear(JanetCompiler *c,
 
 Since the slot (`src`) was created via `janetc_cslot`, `src.flags` will have `JANET_SLOT_CONSTANT` set and thus the first `if` will apply.
 
-Therefore, `janetc_loadconst` will be called with our janet value `"smile!"` (obtained via the `constant` field of our slot `src`).
+Therefore, `janetc_loadconst` will be called with our janet value `"smile!"` (obtained via the `constant` member of our slot `src`).
 
 ---
 
@@ -490,11 +490,13 @@ union Janet {
     void *pointer;
 };
 ```
-A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.  In the author's primary environment, this is defined in `janet.h`.
+A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.
 
-A `Janet` is a union that is capable of representing each of the janet values (e.g. string, array, table, etc.) and locally it is 8 bytes (or 64 bits).
+In the author's primary environment, a `Janet` is a union that is 8 bytes (64 bits) in size.
 
-Numbers are stored directly (`u64`, `i64`, and `number` fields), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` field) is stored.
+It is capable of representing each of the janet values (e.g. string, array, table, etc.).
+
+Numbers are stored directly (`u64`, `i64`, and `number` members), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` member) is stored.
 
 ---
 
