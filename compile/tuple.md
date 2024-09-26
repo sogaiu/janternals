@@ -479,8 +479,6 @@ As noted earlier, `janetc_pop_funcdef` is called by `janet_compile_lint` after i
 
 ---
 
-A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.  In the author's primary environment, this is defined in `janet.h` as:
-
 ```c
 /* Recursive type (Janet) */
 #ifdef JANET_NANBOX_64
@@ -492,23 +490,22 @@ union Janet {
     void *pointer;
 };
 ```
+A number of the `janetc_*` functions take as a parameter, a value of type `Janet`.  In the author's primary environment, this is defined in `janet.h`.
 
-A `Janet` is a union that is capable of representing each of the janet values (e.g. string, array, table, etc.) and locally it is 8 bytes (or 64 bits) [1].
+A `Janet` is a union that is capable of representing each of the janet values (e.g. string, array, table, etc.) and locally it is 8 bytes (or 64 bits).
 
-[1] Numbers are stored directly (`u64`, `i64`, and `number` fields), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` field) is stored.
+Numbers are stored directly (`u64`, `i64`, and `number` fields), but for other values (e.g. strings, arrays, etc.) a pointer (`pointer` field) is stored.
 
 ---
-
-The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits:
 
 ```c
 #define JANET_NANBOX_TAGBITS     0xFFFF800000000000llu
 #define JANET_NANBOX_PAYLOADBITS 0x00007FFFFFFFFFFFllu
 ```
 
----
+The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.  64 bits = 17 bits + 47 bits.
 
-One can determine the type of a `Janet` value via `janet_type`:
+---
 
 ```c
 #define janet_type(x) \
@@ -517,11 +514,11 @@ One can determine the type of a `Janet` value via `janet_type`:
         : JANET_NUMBER)
 ```
 
+One can determine the type of a `Janet` value via `janet_type`.
+
 A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, `x` is treated as a `JANET_NUMBER`.
 
 ---
-
-The different possibilities for `JanetType` are:
 
 ```c
 /* Basic types for all Janet Values */
@@ -545,24 +542,27 @@ typedef enum JanetType {
 } JanetType;
 ```
 
----
+The `JanetType` enum has 16 (`0xF` == `1111` base 2) possibile values.
 
-As an example, to "get at" a janet number for a `Janet` value `x`, one can use the `janet_unwrap_number` macro:
+---
 
 ```c
 #define janet_unwrap_number(x) ((x).number)
 ```
 
+To "get at" a janet number for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.
+
+It accesses the `number` member of the union.
+
 ---
-
-
-Similarly, to "get at" a janet string for a `Janet` value `x`, one can use the `janet_unwrap_string` macro:
 
 ```c
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
 ```
 
-which makes use of `janet_nanbox_to_pointer`:
+Similarly, to "get at" a janet string for a `Janet` value `x`, one can use the `janet_unwrap_string` macro...which makes use of `janet_nanbox_to_pointer`.
+
+---
 
 ```c
 void *janet_nanbox_to_pointer(Janet x) {
@@ -571,7 +571,7 @@ void *janet_nanbox_to_pointer(Janet x) {
 }
 ```
 
-Here, only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` field is returned.
+only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then `x`'s `pointer` member is returned.
 
 ---
 
