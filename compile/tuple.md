@@ -17,7 +17,7 @@ Suppose:
 (compile a-tuple)
 ```
 
-let's trace how we end up with the corresponding Janet bytecode.
+Let's trace how we end up with the corresponding Janet bytecode.
 
 ---
 
