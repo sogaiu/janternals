@@ -247,8 +247,6 @@ static JanetSlot janetc_call(JanetFopts opts, JanetSlot *slots, JanetSlot fun) {
                             ////////////////    /////
         // ...
         }
-
-        if ((opts.flags & JANET_FOPTS_TAIL) &&
         // ...
         } else {
             retslot = janetc_gettarget(opts);
