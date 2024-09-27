@@ -83,7 +83,7 @@ JanetCompileResult janet_compile_lint(Janet source,
 
 After some preparation, `janet_compile_lint` calls `janetc_value`, passing our wrapped `11` as `source`.  Note that during the preparation, `fopts.flags` comes to include `JANET_FOPTS_TAIL`; this will be relevant later.
 
-If the compilation is successful, `janet_compile_lint` calls `janetc_pop_funcdef`, and we'll return to this later.
+If the compilation is successful, `janet_compile_lint` calls `janetc_pop_funcdef`, and we'll return to this subsequently.
 
 ---
 
