@@ -163,7 +163,7 @@ JanetSlot janetc_return(JanetCompiler *c, JanetSlot s) {
 
 In our case `s.constant` is not `nil` so `janetc_emit_s` is called, being passed `JOP_RETURN`.
 
-Note that subsequently, `s.flags` will end up including `JANET_SLOT_RETURNED`.  This appears to be an indicator that `s` has been used as part of a `JOP_RETURN*`(?).
+Note that subsequently, `s.flags` will end up including `JANET_SLOT_RETURNED`.  This appears to be an indicator that `s` has been used as part of a `JOP_RETURN*`.
 
 ---
 
@@ -198,7 +198,7 @@ static int32_t janetc_regfar(JanetCompiler *c, JanetSlot s, JanetcRegisterTemp t
     // ...
 ```
 
-In `janetc_regfar`, since `s` was made via `janetc_cslot`, `s.index` is `-1`.  Therefore, the body of the `if` is skipped and `janetc_movenear` will be called.
+In `janetc_regfar`, since `s` was returned from `janetc_cslot`, `s.index` is `-1`.  Therefore, the body of the `if` is skipped and `janetc_movenear` will be called.
 
 ---
 
