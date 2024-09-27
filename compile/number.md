@@ -137,7 +137,7 @@ JanetSlot janetc_cslot(Janet x) {
 }
 ```
 
-`janetc_cslot` produces a `JanetSlot` for a constant value.
+`janetc_cslot` produces a `JanetSlot` for a constant value.  Each `JanetSlot` seems to be a book-keeping construct for a single `Janet` value.  It sometimes appears to be related to a location on a fiber's stack, but not always (e.g. when `index` is `-1` or when `envindex` >= 0).
 
 Note that the slot's `flags` member includes `JANET_SLOT_CONSTANT`, the `index` member is `-1`, and the `constant` member is the wrapped `11` value.
 
