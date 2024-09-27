@@ -361,3 +361,8 @@ JanetFuncDef *janetc_pop_funcdef(JanetCompiler *c) {
 ```
 As noted earlier, `janetc_pop_funcdef` is called by `janet_compile_lint` after it calls `janetc_value`.  `janetc_pop_funcdef` is responsible for copying a portion of `c->buffer `to `def->bytecode`.
 
+---
+
+...and that is how something can go to 11.
+
+---
