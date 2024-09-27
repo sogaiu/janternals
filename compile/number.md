@@ -274,8 +274,7 @@ static int32_t janetc_regfar(JanetCompiler *c, JanetSlot s, JanetcRegisterTemp t
     int32_t nearreg = janetc_regalloc_temp(&c->scope->ra, tag);
     janetc_movenear(c, nearreg, s);
     ///////////////
-    if (nearreg >= 0xF0) {
-      // ...
+    // ...
     } else {
         reg = nearreg;
         ///   ///////
@@ -290,7 +289,7 @@ static int32_t janetc_regfar(JanetCompiler *c, JanetSlot s, JanetcRegisterTemp t
 
 ```
 
-Having returned from `janetc_movenear`, `nearreg`'s value is copied to `reg` and `nearreg` itself is "freed".  Then, to hold on to `reg` (or stated differently, to keep `reg` valid), `janetc_regalloc_touch` is called for `reg`.
+Having returned from `janetc_movenear`, `nearreg`'s value is copied to `reg` and `nearreg` itself is "freed".  Then, to keep `reg` valid, `janetc_regalloc_touch` is called for `reg`.
 
 Returning `reg` from `janetc_regfar`, we are back in `janetc_emit_s`.
 
