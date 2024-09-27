@@ -119,9 +119,9 @@ JanetSlot janetc_value(JanetFopts opts, Janet x) {
 }
 ```
 
-Because `x` is a wrapped janet number, the switch statement's default case is entered.  Thus, `janetc_cslot` is called.
+Because `x` is a wrapped janet number, the switch statement's default case is entered.  Thus, `janetc_cslot` is called and then `janetc_return` because `JANET_FOPTS_TAIL` is set in `opts.flags` (as mentioned previously).
 
-We'll return to the eventual call to `janetc_return` shortly.
+Let's first visit `janetc_cslot`.
 
 ---
 
@@ -144,7 +144,7 @@ JanetSlot janetc_cslot(Janet x) {
 
 Note that the slot's `flags` member includes `JANET_SLOT_CONSTANT`, the `index` member is `-1`, and the `constant` member is the wrapped `11` value.
 
-Once `janetc_cslot` returns to `janetc_valute`, eventually `janetc_return` is called.
+Shortly after `janetc_cslot` returns to `janetc_value`, `janetc_return` is called.
 
 ---
 
