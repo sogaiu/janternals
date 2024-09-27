@@ -180,7 +180,7 @@ int32_t janetc_emit_s(JanetCompiler *c, uint8_t op, JanetSlot s, int wr) {
     // ...
 ```
 
-The primary action of `janetc_emit_s` is to call `janetc_emit`.  In this case, with opcode `op` (`JOP_PUSH`) and `s`, a `JanetSlot`, for our wrapped value `11`.
+The primary action of `janetc_emit_s` is to call `janetc_emit`.  In this case the call is made with opcode `op` (`JOP_PUSH`) and `s`, a `JanetSlot`, for our wrapped value `11`.
 
 But before calling `janetc_emit`, `janetc_emit_s` calls `janetc_regfar` (passing it `s` for our wrapped value `11"`).  Time for a bit of a detour...
 
