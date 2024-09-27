@@ -265,7 +265,7 @@ void janetc_emit(JanetCompiler *c, uint32_t instr) {
 
 `janetc_emit` takes a single bytecode instruction (`instr`) and using `janet_v_push`, appends it to `c->buffer` (which is where the `JanetCompiler` value, `c`, accumulates emitted bytecode).
 
-Returning from `janetc_emit` puts us back in `janetc_loadconst`.  Then another return brings us to to `janetc_movenear` which also returns.  Thus we end up in `janetc_regfar`.
+Returning from `janetc_emit` puts us back in `janetc_loadconst`.  Then another return brings us to `janetc_movenear` which also returns.  Thus we end up in `janetc_regfar`.
 
 ---
 
