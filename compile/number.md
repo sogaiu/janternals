@@ -363,6 +363,6 @@ Recall that `c->buffer` is where `janetc_emit` copied bytecode instructions into
 
 ---
 
-...and that is how something can go to 11.
+...and that is how, sometimes, janet goes to 11.
 
 ---
