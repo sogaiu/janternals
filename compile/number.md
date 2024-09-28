@@ -42,7 +42,7 @@ cfun_compile
 JANET_CORE_FN(cfun_compile,
               "(compile ast &opt env source lints)",
               "Compiles an Abstract Syntax Tree (ast) into a function. "
-              "Pair the compile function with parsing functionality to implement "
+              // ...
               "eval. Returns a new function and does not modify ast. Returns an error "
               // ...
               "`(level line col message)`.") {
