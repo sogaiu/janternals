@@ -81,9 +81,9 @@ JanetCompileResult janet_compile_lint(Janet source,
     // ...
 ```
 
-After some preparation, `janet_compile_lint` calls `janetc_value`, passing our wrapped `11` as `source`.  Note that during the preparation, `fopts.flags` comes to include `JANET_FOPTS_TAIL`; this will be relevant later.
+After some setup, `janet_compile_lint` calls `janetc_value`, passing our wrapped `11` as `source`.  Note that during the setup, `JANET_FOPTS_TAIL` is set in `fopts.flags`; this will be relevant later.
 
-If the compilation is successful, `janet_compile_lint` calls `janetc_pop_funcdef`, and we'll return to this subsequently.
+If the compilation is successful, `janet_compile_lint` calls `janetc_pop_funcdef`.  We'll return to this subsequently.
 
 ---
 
@@ -137,7 +137,7 @@ JanetSlot janetc_cslot(Janet x) {
 }
 ```
 
-`janetc_cslot` produces a `JanetSlot` for a constant value.  Each `JanetSlot` seems to be a book-keeping construct for a single `Janet` value.  It sometimes appears to be related to a location on a fiber's stack, but not always (e.g. when `index` is `-1` or when `envindex` >= 0).
+`janetc_cslot` produces a `JanetSlot` for a constant value.  Each `JanetSlot` seems to be a book-keeping construct for a single `Janet` value.  Sometimes it is related to a location on a fiber's stack, but not always (e.g. when `index` is `-1` or when `envindex` >= 0).
 
 Note that the slot's `flags` member includes `JANET_SLOT_CONSTANT`, the `index` member is `-1`, and the `constant` member is the wrapped `11` value.
 
@@ -150,7 +150,7 @@ Shortly after `janetc_cslot` returns to `janetc_value`, `janetc_return` is calle
 JanetSlot janetc_return(JanetCompiler *c, JanetSlot s) {
     if (!(s.flags & JANET_SLOT_RETURNED)) {
         if (s.flags & JANET_SLOT_CONSTANT && janet_checktype(s.constant, JANET_NIL))
-            janetc_emit(c, JOP_RETURN_NIL);
+            // ...
         else
             janetc_emit_s(c, JOP_RETURN, s, 0);
             /////////////    //////////
@@ -337,8 +337,7 @@ Back from `janetc_value`, with a successful compilation, a call is made to `jane
 
 ```c
 /* Compile a funcdef */
-/* Once the various other settings of the FuncDef have been tweaked,
- * call janet_def_addflags to set the proper flags for the funcdef */
+// ...
 JanetFuncDef *janetc_pop_funcdef(JanetCompiler *c) {
     JanetScope *scope = c->scope;
     JanetFuncDef *def = janet_funcdef_alloc();
