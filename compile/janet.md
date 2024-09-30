@@ -26,7 +26,9 @@ In the author's primary environment, a `Janet` is a union that is 8 bytes (64 bi
 
 It is capable of representing each of the janet values (e.g. `JanetString`, `JanetArray`, etc.).
 
-Numbers are stored directly (`u64`, `i64`, and `number` members), but for other values (e.g. `JanetString`s, `JanetArray`s, etc.) a pointer (`pointer` member) is stored.
+Numbers are stored directly (in the `number` member), but for other values (e.g. `JanetString`s, `JanetArray`s, etc.) a pointer (`pointer` member) is stored.
+
+`i64` and `u64` are used in (at least) the conversion to and from pointers.
 
 ---
 
@@ -36,6 +38,8 @@ Numbers are stored directly (`u64`, `i64`, and `number` members), but for other 
 ```
 
 The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.  64 bits = 17 bits + 47 bits.
+
+Note that since some of the bits are used for tagging, less than 64 bits are available for expressing values.
 
 ---
 
