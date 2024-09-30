@@ -51,9 +51,9 @@ Perhaps surprisingly, this can work because not all 64 bits are needed to repres
         : JANET_NUMBER)
 ```
 
-One can determine the type of a `Janet` value via `janet_type`.
+One can determine the type of a `Janet` value via the `janet_type` macro.
 
-A check for `NaN` is done on `x`, and if true, `x`'s 64 bits (interpreted as `u64`) are right-shifted by 47 and then the right-most 4 bits (`0xF` == `1111` base 2) are cast to `JanetType`.  Otherwise, the result is `JANET_NUMBER`.
+A check for `NaN` is done on `x`'s `number` member, and if true, the rightmost 4 bits (0xF == 1111 base 2) of the tag bits are cast to `JanetType`.  Otherwise, the result is `JANET_NUMBER`.
 
 ---
 
