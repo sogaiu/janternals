@@ -20,11 +20,12 @@ union Janet {
     void *pointer;
 };
 ```
+
 A number of the `janet*` C functions take a value of type `Janet` as a parameter.
 
-In the author's primary environment, a `Janet` is a union that is 8 bytes (64 bits) in size and is capable of representing each of the janet values (e.g. `JanetString`, `JanetArray`, etc.).
+In a typical environment, a `Janet` is an 8-byte (64-bit) union.
 
-Numbers are stored directly (in the `number` member), but for other values (e.g. `JanetString`s, `JanetArray`s, etc.) a pointer (`pointer` member) is stored.
+Boolean values and `nil` are stored in `u64`, numbers in the `number` member, and other values (e.g. `JanetString`s, `JanetArray`s, etc.) in the `pointer` member.
 
 `i64` and `u64` are used for various internal purposes (e.g. converting to and from pointers).
 
