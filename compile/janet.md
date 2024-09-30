@@ -40,6 +40,8 @@ The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while 
 
 Note that since some of the bits are used for tagging, less than 64 bits are available for expressing values.
 
+Perhaps surprisingly, this can work because not all 64 bits are needed to represent pointers for typical 64-bit architectures nor for non-NaN doubles.
+
 ---
 
 ```c
