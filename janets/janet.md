@@ -5,7 +5,7 @@ class: invert
 paginate: true
 ---
 
-## The Janet Type and Wrapping
+## The Janet Type
 
 ---
 
