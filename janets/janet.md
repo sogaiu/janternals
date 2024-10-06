@@ -36,7 +36,7 @@ Boolean values and `nil` are stored in `u64`, numbers in the `number` member, an
 #define JANET_NANBOX_PAYLOADBITS 0x00007FFFFFFFFFFFllu
 ```
 
-The "type" (or "tag") of a `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.  64 bits = 17 bits + 47 bits.
+The "type" (or "tag") of a 64-bit `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.
 
 Note that since some of the bits are used for tagging, less than 64 bits are available for expressing values.
 
@@ -79,7 +79,7 @@ typedef enum JanetType {
 } JanetType;
 ```
 
-The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile values.
+The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile values, one for each type of value a `Janet` can wrap.
 
 ---
 
@@ -87,9 +87,8 @@ The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile val
 #define janet_unwrap_number(x) ((x).number)
 ```
 
-To "get at" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.
 
-It accesses the `number` member of the union.
+To "get at" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.  The macro simply accesses the `number` member of the union.
 
 ---
 
@@ -97,7 +96,7 @@ It accesses the `number` member of the union.
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
 ```
 
-Similarly, to "get at" a `JanetString` for a `Janet` value `x`, one can use the `janet_unwrap_string` macro...which makes use of `janet_nanbox_to_pointer`.
+Similarly, to "get at" a `JanetString` for a `Janet` value `x`, the `janet_unwrap_string` macro can be used.  It makes use of the `janet_nanbox_to_pointer` function.
 
 ---
 
