@@ -25,7 +25,7 @@ A number of the `janet*` C functions take a value of type `Janet` as a parameter
 
 In a typical environment, a `Janet` is an 8-byte (64-bit) union.
 
-Boolean values and `nil` are stored in `u64`, numbers in the `number` member, and other values (e.g. `JanetString`s, `JanetArray`s, etc.) in the `pointer` member.
+Boolean values and `nil` are stored in `u64`, numbers in the `number` member, and other values (e.g. `JanetString`s, `JanetArray`s, etc.) using the `pointer` member.
 
 `i64` and `u64` are used for various internal purposes (e.g. converting to and from pointers).
 
