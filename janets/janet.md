@@ -112,13 +112,54 @@ Only the payload bits of `x` are retained (or equivalently, the tag bits are dis
 
 ---
 
-As might be expected, for the reverse direction of "wrapping", the appropriate callables exist in Janet's API.
+```c
+#define janet_checktype(x, t) \
+    (((t) == JANET_NUMBER) \
+        ? janet_nanbox_isnumber(x) \
+        : janet_nanbox_checkauxtype((x), (t)))
+```
 
-For example:
+```c
+#define janet_nanbox_isnumber(x) \
+    (!isnan((x).number) || ((((x).u64 >> 47) & 0xF) == JANET_NUMBER))
+```
 
-* `janet_nanbox_wrap_c`
-* `janet_nanbox_from_cpointer`
-* `janet_wrap_string`
+```c
+#define janet_nanbox_checkauxtype(x, type) \
+    (((x).u64 & JANET_NANBOX_TAGBITS) == janet_nanbox_tag((type)))
+```
+
+```c
+#define janet_nanbox_lowtag(type) ((uint64_t)(type) | 0x1FFF0)
+#define janet_nanbox_tag(type) (janet_nanbox_lowtag(type) << 47)
+```
+
+`janet_checktype` can be used to check if a `Janet` is wrapping a specific `JanetType` (e.g. `JanetString`).
+
+---
+
+```c
+#define janet_wrap_string(s) janet_nanbox_wrap_c((s), JANET_STRING)
+```
+
+```c
+#define janet_nanbox_wrap_c(p, t) \
+    janet_nanbox_from_cpointer((p), janet_nanbox_tag(t))
+```
+
+```c
+Janet janet_nanbox_from_cpointer(const void *p, uint64_t tagmask) {
+    Janet ret;
+    ret.pointer = (void *)p;
+    ret.u64 |= tagmask;
+    return ret;
+}
+```
+
+For the reverse direction of "wrapping", the appropriate callables exist in Janet's API.
+
+For example, the `janet_wrap_string` macro produces a `Janet` from a `JanetString`.
 
 See `janet.h` for more details.
+
 
