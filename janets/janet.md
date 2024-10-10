@@ -127,7 +127,7 @@ Only the payload bits of `x` are retained (or equivalently, the tag bits are dis
 #define janet_nanbox_tag(type) (janet_nanbox_lowtag(type) << 47)
 ```
 
-`janet_checktype` can be used to check if a `Janet` is wrapping a specific `JanetType` (e.g. `JanetString`).
+`janet_checktype` can be used to check if a `Janet` is wrapping a specific `JanetType` (e.g. `JanetString`).  Note the `& 0xF` for selecting the 4 bits that represent a `JanetType`.
 
 ---
 
