@@ -107,6 +107,8 @@ To "get at" or "unwrap" a `JanetNumber` for a `Janet` value `x`, one can use the
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
 ```
 
+---
+
 Similarly, to "get at" or "unwrap" a `JanetString` for a `Janet` value `x`, the `janet_unwrap_string` macro can be used.  It makes use of the `janet_nanbox_to_pointer` function.
 
 ---
