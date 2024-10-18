@@ -1,6 +1,9 @@
+
+# The Janet type
+
 ---
 
-## The Janet Type
+A brief examination of the `Janet` type and some related functions and macros.
 
 ---
 
@@ -16,13 +19,15 @@ union Janet {
 };
 ```
 
-A number of the `janet*` C functions take a value of type `Janet` as a parameter.
+---
+
+A number of janet's C functions take a value of type `Janet` as a parameter.
 
 In a typical environment, a `Janet` is an 8-byte (64-bit) union.
 
-Boolean values and `nil` are stored in `u64`, numbers in the `number` member, and other values (e.g. `JanetString`s, `JanetArray`s, etc.) using the `pointer` member.
+A boolean value or a `nil` is stored as a `u64` member, a number as a `number` member, and any other value such as a `JanetString` or `JanetArray` using the `pointer` member.
 
-`i64` and `u64` are used for various internal purposes (e.g. converting to and from pointers).
+`i64` and `u64` are used for various internal purposes such as converting to and from pointers.
 
 ---
 
@@ -31,11 +36,15 @@ Boolean values and `nil` are stored in `u64`, numbers in the `number` member, an
 #define JANET_NANBOX_PAYLOADBITS 0x00007FFFFFFFFFFFllu
 ```
 
-The "type" (or "tag") of a 64-bit `Janet` value is stored in the upper (17) bits while the "value" (or "payload") is stored in the rest of the (47) bits.
+---
 
-Note that since some of the bits are used for tagging, less than 64 bits are available for expressing values.
+The upper 17 bits in a 64-bit `Janet` are used to store information about the kind of value it represents such as a `JanetString`.  These bits are referred to as "tag bits".
 
-Perhaps surprisingly, this can work because not all 64 bits are needed to represent pointers for typical 64-bit architectures nor for non-NaN doubles.
+The remaining lower 47 bits are used for the specifics of the value such as for `true` or `11`.  These bits are referred to as "payload bits".
+
+Note that since some of the 64 bits are used for tagging, less than 64 bits are available for expressing values.
+
+Perhaps surprisingly, this can work because not all 64 bits are needed to represent pointers for typical 64-bit architectures nor for ordinary doubles.
 
 ---
 
@@ -46,9 +55,11 @@ Perhaps surprisingly, this can work because not all 64 bits are needed to repres
         : JANET_NUMBER)
 ```
 
-One can determine the type of a `Janet` value via the `janet_type` macro.
+---
 
-A check for `NaN` is done on `x`'s `number` member, and if true, the rightmost 4 bits (0xF == 1111 base 2) of the tag bits are cast to `JanetType`.  Otherwise, the result is `JANET_NUMBER`.
+The "type" of a `Janet` value can be determined by using the `janet_type` macro.
+
+First, `x`'s `number` member is checked for "not-a-number"-ness.  If the result is true, the rightmost 4 bits of the tag bits are cast to `JanetType`.  Otherwise, the result is `JANET_NUMBER`.
 
 ---
 
@@ -74,7 +85,11 @@ typedef enum JanetType {
 } JanetType;
 ```
 
-The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile values, one for each type of value a `Janet` can wrap.
+---
+
+The `JanetType` enumeration has 16 possible values, one for each type of value a `Janet` can represent or "wrap".
+
+Note that 16 is two raised to the fourth power and recall that the rightmost 4 bits of the tag bits are used to determine what kind of thing a particular `Janet` value represents.
 
 ---
 
@@ -82,8 +97,9 @@ The `JanetType` enum has 16 (one more than `0xF` == `1111` base 2) possibile val
 #define janet_unwrap_number(x) ((x).number)
 ```
 
+---
 
-To "get at" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.  The macro simply accesses the `number` member of the union.
+To "get at" or "unwrap" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwrap_number` macro.  The macro simply accesses the `number` member of the `Janet` union.
 
 ---
 
@@ -91,7 +107,7 @@ To "get at" a `JanetNumber` for a `Janet` value `x`, one can use the `janet_unwr
 #define janet_unwrap_string(x) ((JanetString)janet_nanbox_to_pointer(x))
 ```
 
-Similarly, to "get at" a `JanetString` for a `Janet` value `x`, the `janet_unwrap_string` macro can be used.  It makes use of the `janet_nanbox_to_pointer` function.
+Similarly, to "get at" or "unwrap" a `JanetString` for a `Janet` value `x`, the `janet_unwrap_string` macro can be used.  It makes use of the `janet_nanbox_to_pointer` function.
 
 ---
 
@@ -101,6 +117,8 @@ void *janet_nanbox_to_pointer(Janet x) {
     return x.pointer;
 }
 ```
+
+---
 
 Only the payload bits of `x` are retained (or equivalently, the tag bits are discarded) and then (the modified) `x`'s `pointer` member is returned.
 
@@ -122,7 +140,9 @@ Only the payload bits of `x` are retained (or equivalently, the tag bits are dis
 #define janet_nanbox_tag(type) (janet_nanbox_lowtag(type) << 47)
 ```
 
-`janet_checktype` can be used to check if a `Janet` is wrapping a specific `JanetType` (e.g. `JanetString`).  Note the `& 0xF` for selecting the 4 bits that represent a `JanetType`.
+---
+
+`janet_checktype` can be used to check if a `Janet` is wrapping a specific `JanetType` (for example a `JanetString`).  Note the `& 0xF` for selecting the 4 bits that represent a `JanetType`.
 
 ---
 
@@ -140,10 +160,21 @@ Janet janet_nanbox_from_cpointer(const void *p, uint64_t tagmask) {
 }
 ```
 
-For the reverse direction of "wrapping", the appropriate callables exist in Janet's API.
+---
 
-For example, the `janet_wrap_string` macro produces a `Janet` from a `JanetString`.
+For the reverse direction of "wrapping", the appropriate macros and functions exist in Janet's API.
 
-See `janet.h` for more details.
+For example, the `janet_wrap_string` macro yields a `Janet` from a `JanetString`.
 
+---
 
+## References
+
+* `janet.h` - wrapping / unwrapping bits, `Janet`, `JanetType`, etc.
+* [Pointer magic for efficient dynamic value representations](https://www.npopov.com/2012/02/02/Pointer-magic-for-efficient-dynamic-value-representations.html) - Nikita Popov
+
+---
+
+For some further information, please see these references.
+
+---
