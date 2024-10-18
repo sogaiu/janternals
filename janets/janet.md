@@ -1,9 +1,4 @@
 ---
-marp: true
-theme: default
-class: invert
-paginate: true
----
 
 ## The Janet Type
 
