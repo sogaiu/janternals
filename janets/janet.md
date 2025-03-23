@@ -21,13 +21,13 @@ union Janet {
 
 ---
 
-A number of janet's C functions take a value of type `Janet` as a parameter.
+A number of the C functions in janet's implementation involve a `Janet` or related type in their signatures.
 
 In a typical environment, a `Janet` is an 8-byte (64-bit) union.
 
-A boolean value or a `nil` is stored as a `u64` member, a number as a `number` member, and any other value such as a `JanetString` or `JanetArray` using the `pointer` member.
+A boolean value or a `nil` is stored as a `u64` member, a number as a `number` member, and any other value such as a `JanetString` or `JanetArray` uses the `pointer` member.
 
-`i64` and `u64` are used for various internal purposes such as converting to and from pointers.
+The `i64` and `u64` members are used for various internal purposes such as converting to and from pointers.
 
 ---
 
